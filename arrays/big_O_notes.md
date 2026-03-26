@@ -10,7 +10,8 @@ So time complexity is not about the time it takes to run a program, rather its t
 # Space complexity: Measures extra memory used by the algorithm. Input itself is not counted. Only additional memory is counted. 
 * How extra memory used grows with input size 'n'
 * Depends on memory allocation growth. 
-* For constant variables, memory size doesnot grow at run time so space complexity is O(1).
+* For constant/fixed number of variables, No extra memory needed at run time,
+so space complexity is O(1).
 * It defines how much memory space is needed to run a program. 
 * It depends on extra memory used, not just input size alone. 
 * Example: 
@@ -63,12 +64,29 @@ void nestedLoop(int n)
         }
     }
     time complexity increases to O(n*n) = O(n^2)
-    But in depth triangular method solving explanation: i=0, loop runs 'n' times
-    i=1, loop runs / iterations 'n-1' times
-    i=2, loop runs 'n-2' times 
-    and so on ..... in total its n+(n-1)+(n-2)+......iterations = SumOf n(n+1)/2 which simplifies to O(n^2) 
     space complexity O(1) since no extra memory space needed at run time. 
 }
+
+* Nested loop 2 input pattern
+for (i = 0; i < n; i++)
+    for (j = 0; j < m; j++)
+Time complexity: O(n * m)
+
+* In depth explanantion of O(n^2) which internally is a triangular loop with n(n+1)/2 operations,
+but simplified to O(n^2) since Big O ignores constants and lower order terms.
+Let n = 5;
+for(i=0; i<n; i++)
+{
+    for(j=i; j<n; j++) {}
+}
+i = 0, j = 0 1 2 3 4  total 5 ie n iterations
+i = 1, j =   1 2 3 4  total 4 ie n-1 iterations
+i = 2, j =     2 3 4  total 3 ie n-2 iterations
+i = 3, j =       3 4  total 2 ie n-3 iterations
+i = 4, j =         4  total 1 ie n-4 iterations 
+
+This looks like a triangular shape total operations = 5+4+3+2+1 = 15 times loop runs 
+General formula for this n+(n-1)+(n-2)+....= n(n+1)/2 = simplifies to n*n ignoring constants and smaller terms and considered as O(n^2). 
 
 # Time O(1) = Constant time 
 -> int a, b, c, d, e; // Space complexity still O(1) since its fixed number of variables.
@@ -110,6 +128,38 @@ f(4)    f(3)
 * only variables -> O(1)
 * recursion stack -> O(n)
 
+# Space for recursive stack:
+void recStack(int n)
+{
+    if(n == 0) return 0;
+    return recStack(n-1);
+}
+* Each func call goes into stack and waiting for the next call to return. 
+if n = 3 -> recStack(3) -> recStack(2) -> recStack(1) -> recStack(0)  
+stack growth from first call input 3: total stack frames = n so space complexity = O(n)
+|recStack(2)|
+|recStack(1)|
+|recStack(0)|
+
 Interview Questions 
 1. How to optimize O(n^2) to O(n)
-2. Recognize log n patterns and explain 
+2. Recognize Big O patterns and explain 
+
+# Space : O(n) 
+Ex 1: int arr[n]; 
+sol: Memory grows with 'n' so we need extra allocation
+
+Ex 2: int arr[n];
+int temp[n];
+sol: arr[n] space complexity O(n)
+temp[n] space O(n)
+we allocate 2 arrays of size n, space needed in 
+total O(n+n) = O(2n) ~= O(n) dropping constants 
+
+Ex 3: int a,b,c;
+sol: fixed number of variables, no extra memory, not depend on input 
+
+Ex 4: int func(int n) {
+    return func(n-1);
+} 
+sol: recursive stack created. stack depth = n
