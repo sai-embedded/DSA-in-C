@@ -18,6 +18,7 @@ int main()
     total 7 combinations to try without any optimizations
     */ 
     int n = sizeof(arr1)/sizeof(arr1[0]);
+    int flag = 0;
 
     // since we have nested loops depending on one input size 'n', total complexity is O(n^2)
     for(int i=0; i<n; i++) // Time complexity O(n) simplified from triangular loop
@@ -27,12 +28,17 @@ int main()
             if(arr1[i]+arr1[j]==target)
             {
                 printf("2 sum indices are (%d,%d)\n", i,j);
+                flag = 1;
                 // continue to find all possible pairs
             }
         }
     }
 
-    printf("no pair found\n");
+    if(flag == 0)
+    {
+        printf("no pair found\n");
+    }
+
     return 0;
 }
 
