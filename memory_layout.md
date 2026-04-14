@@ -100,3 +100,15 @@ when C program is compiled by compiler and during linking phase (linker script p
 * Important thing to note here we learn MCU power cycle: why is data section separated into bss (uninitialized) and data (initialized)? when we flash our program into any microcontroller memory, data section is stored in ROM and  also a copy in RAM. all computations on global variables happen reading values from RAM. 
 But when MCU power cycles, we dont want to loose all the globals, so ROM variables are retained to their initialized values and RAM is cleared. But after power cycle restarts the MCU and puts a copy of ROM data into RAM. .bss is stored in RAM only because the values anyways uninitialized and are set to 0,
 so its waste of memory to store a copy in ROM. So even during power cycles, values of bss variables always starts from 0. 
+
+
+# Stack memory allocation is faster than heap because its just a pointer movement, while heap requires allocation logic. 
+
+# ISR + Volatile 
+* Condition: ISR sets a variable & task reads it
+Ex 1:
+uint8_t sensorReady; 
+# whats wrong: compiler optimizates; CPU catches value in register; Value Not re-read from memory; So task may never see an updated value;
+* Fix :
+volatile uint8_t sensorReady;
+# keyword volatile tells compiler to always read its value from memory. NO optimizations. 
