@@ -1,4 +1,4 @@
-// Follows First-in-Last-out
+// Follows Last-In-First-Out
 // Operations:
 // 1. add() -> push()
 // 2. delete() -> pop() // fetch top most stack element & delete it
@@ -33,7 +33,7 @@ void push(int data)
 
 void print_stack(void)
 {
-    if(!top)
+    if (!top)
     {
         printf("print_stack: stack empty\n");
         return;
