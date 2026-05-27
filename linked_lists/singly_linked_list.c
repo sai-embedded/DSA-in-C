@@ -1,129 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct __attribute__((packed)) node
+// typedef struct __attribute__((packed)) node
+// Packed is not needed for general use, can cause slower or unaligned memory access and crash on some MCUs
+typedef struct node
 {
     int data;               // 4bytes data
     struct node *next_node; // pointer on this machine 8bytes
 } node_s;
 
 node_s *head_g = NULL;
-
-void traverse_list(void)
-{
-    for (node_s *cursor = head_g; cursor != NULL; cursor = cursor->next_node)
-    {
-        printf("%d\n", cursor->data);
-    }
-}
-
-// Complexity of adding node at start is O(1). Eliminates traversal throuth the list.
-int add_node_at_start(int data)
-{
-    node_s *temp = NULL;
-
-    temp = malloc(sizeof(node_s));
-    if (temp == NULL)
-    {
-        printf("malloc failed on temp\n");
-        return -1;
-    }
-
-    temp->data = data;
-    temp->next_node = head_g;
-    head_g = temp;
-
-    return 0;
-}
-
-// increases time and space complexity to O(n); extra memory allocations + traversing through the list of 'n' nodes
-int add_node_at_end(int data)
-{
-    node_s *n = NULL;
-    n = malloc(sizeof(node_s));
-    if (!n)
-    {
-        return -1;
-    }
-
-    n->data = data;
-    n->next_node = NULL;
-
-    node_s *cursor = NULL;
-
-    for (cursor = head_g; cursor->next_node != NULL; cursor = cursor->next_node)
-    {
-        // traverse the list and point cursor to the last node in the list
-    }
-
-    cursor->next_node = n; // add node to the end of list.
-
-    return 0;
-}
-
-int search_node_data(int data)
-{
-    node_s *cursor = NULL;
-
-    for (cursor = head_g; cursor->next_node != NULL; cursor = cursor->next_node)
-    {
-        if (cursor->data == data)
-        {
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-int delete_node(int data) // TODO: issue deleting first node : Need fix;
-{
-    for (node_s *prev = NULL, *curr = head_g;
-         curr != NULL;
-         prev = curr, curr = curr->next_node)
-    {
-        if (curr->data == data)
-        {
-            prev->next_node = curr->next_node;
-            free(curr);
-            printf("deleted %d\n", data);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int insert_node(int key, int data)
-{
-    node_s *k, *new;
-    for(k = head_g; k!=NULL; k=k->next_node)
-    {
-        if(k->data == key)
-        {
-            printf("key found\n");
-            break;
-        }
-    }
-    
-    if(!k)
-    {
-        printf("Insertion failed: key not found\n");
-        return 0;
-    }
-
-    new = malloc(sizeof(node_s));
-    if(!new)
-    {
-        printf("Insertion failed: new memory not allocated\n");
-        return -1;
-    }
-
-    new->data = data;
-    new->next_node = k->next_node;
-    k->next_node = new;
-
-    return 0;
-}
 
 int init_node(int data)
 {
@@ -143,15 +29,174 @@ int init_node(int data)
 
     return 0;
 }
+
+void traverse_list(void)
+{
+    // for (node_s *cursor = head_g; cursor != NULL; cursor = cursor->next_node)
+    node_s *cursor = head_g;
+    while (cursor != NULL)
+    {
+        printf("%d -> ", cursor->data);
+        cursor = cursor->next_node;
+    }
+    printf("NULL\n");
+}
+
+// Complexity of adding node at start is O(1). Eliminates traversal throuth the list.
+int add_node_at_start(int data)
+{
+    node_s *temp = malloc(sizeof(node_s));
+
+    if (temp == NULL)
+    {
+        printf("malloc failed on temp\n");
+        return -1;
+    }
+
+    temp->data = data;
+    temp->next_node = head_g;
+    head_g = temp;
+
+    return 0;
+}
+
+// Each insertion: time O(n), space O(1) bcoz only 1 node is allocated
+int add_node_at_end(int data)
+{
+    node_s *new = malloc(sizeof(node_s));
+
+    if (new == NULL)
+    {
+        return -1;
+    }
+
+    new->data = data;
+    new->next_node = NULL;
+
+    // empty list
+    if (head_g == NULL)
+    {
+        head_g = new;
+        return 0;
+    }
+
+    node_s *cursor = head_g;
+
+    while (cursor->next_node != NULL)
+    {
+        // traverse the list and point cursor to the last node in the list
+        cursor = cursor->next_node;
+    }
+
+    cursor->next_node = new; // add node to the end of list.
+
+    return 0;
+}
+
+int search_node_data(int data)
+{
+    node_s *cursor = head_g;
+
+    while (cursor != NULL)
+    {
+        if (cursor->data == data)
+        {
+            return 1;
+        }
+
+        cursor = cursor->next_node;
+    }
+
+    return 0;
+}
+
+int delete_node(int data)
+{
+    node_s *prev = NULL;
+    node_s *curr = head_g;
+
+    while (curr != NULL)
+    {
+        if (curr->data == data)
+        {
+            // deleting first node
+            if (prev == NULL)
+            {
+                head_g = curr->next_node; // move head
+            }
+            else
+            {
+                prev->next_node = curr->next_node;
+            }
+
+            free(curr);
+
+            printf("deleted %d\n", data);
+
+            return 1;
+        }
+
+        prev = curr;
+        curr = curr->next_node;
+    }
+
+    return 0;
+}
+
+int insert_node(int key, int data)
+{
+    node_s *cursor = head_g;
+
+    while (cursor != NULL)
+    {
+        if (cursor->data == key)
+        {
+            node_s *new_node = malloc(sizeof(node_s));
+
+            if (new_node == NULL)
+            {
+                return -1;
+            }
+
+            new_node->data = data;
+            new_node->next_node = cursor->next_node;
+
+            cursor->next_node = new_node;
+
+            return 1;
+        }
+
+        cursor = cursor->next_node;
+    }
+
+    return 0;
+}
+
+void free_list(void)
+{
+    node_s *temp;
+
+    while (head_g != NULL)
+    {
+        temp = head_g;
+        head_g = head_g->next_node;
+
+        free(temp);
+    }
+}
+
 int main()
 {
-    printf("struct size = %ld\n", sizeof(node_s)); // total 48bytes
+    // printf("struct size = %ld\n", sizeof(node_s));
 
     init_node(10);
+
     add_node_at_start(2);
     add_node_at_start(1);
+
     add_node_at_end(1);
     add_node_at_end(2);
+
     traverse_list();
 
     printf("search 0: %s\n", search_node_data(0) ? "found" : "not found");
@@ -174,14 +219,42 @@ int main()
         add_node_at_end(i);
     }
     */
-    traverse_list();
+
     delete_node(10);
-    delete_node(2); // TODO: seg fault for deleting 1 
+    delete_node(2); 
 
     printf("new list \n");
     traverse_list();
+
     insert_node(1, 10);
     insert_node(2, 20);
+
     traverse_list();
+
+    free_list();
+
     return 0;
 }
+
+/*
+Important Linked List operations:
+1. Traversal -> O(n)
+2. Insert at beginning -> O(1)
+3. Insert at end -> O(n) unless a tail pointer exists 
+4. Delete node search required -> O(n)
+5. Search -> O(n)
+
+
+* Head Pointer -> first node. loosing head->memory leak->list inaccessible
+* Why LL -> Good for frequent insertion/deletion & dynamic size;
+Bad for random access.
+
+📌 Array vs Linked List
+Feature	                Array	        Linked List
+Random access	        O(1)	            O(n)
+Insert/delete middle	O(n)	        O(1) if pointer known
+Dynamic size	        Poor	            Good
+
+
+
+*/
