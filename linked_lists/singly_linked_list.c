@@ -185,6 +185,26 @@ void free_list(void)
     }
 }
 
+node_s* reverse_list_iterative(node_s *head)
+{
+    // Space complexity O(1)
+    node_s *curr = head;
+    node_s *prev = NULL;
+    node_s *next = NULL;
+
+    // Time complexity O(n)
+    while(curr!=NULL)
+    {
+        next = curr->next_node;
+        curr->next_node = prev;
+        prev = curr;
+        curr = next;
+    }
+
+    // At the end, curr = next = NULL, prev = last valid node and is the new head 
+    return prev;
+}
+
 int main()
 {
     // printf("struct size = %ld\n", sizeof(node_s));
