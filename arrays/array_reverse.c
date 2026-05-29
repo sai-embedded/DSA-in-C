@@ -7,6 +7,9 @@ int main()
 
     int n = sizeof(arr)/sizeof(arr[0]);
 
+    if(arr == NULL || n <= 1)
+        return; // Need minimum 2 elements to reverse 
+
     int temp;
 
     for(int i=0; i<n; i++) // time complexity : O(n)
@@ -14,6 +17,13 @@ int main()
         printf("original arr arr[%d] = %d\n", i, arr[i]);
     }
 
+    /*
+    “I’ll use a two-pointer style approach conceptually.
+    One side starts from the beginning and the other from the end.
+    During each iteration I swap symmetric elements and move inward.
+    Since each swap places two elements into their final positions, 
+    we only need to iterate until the midpoint of the array.”
+    */
     for(int i=0; i<n/2; i++) // time complexity : O(n/2)
     {
         temp = arr[i];

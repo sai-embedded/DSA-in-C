@@ -2,6 +2,9 @@
 
 void move_zeros(int *arr, int n)
 {
+    if (arr == NULL || n <= 0)
+        return;
+        
     int *start = arr;
     
     for(int *move = arr; move < arr + n; move++)

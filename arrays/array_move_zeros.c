@@ -1,5 +1,34 @@
 #include <stdio.h>
 
+/*
+Pros - fewer writes, cleaner no swap 
+Tradeoffs - requires second pass 
+*/
+void move_zeros_optimized(int *arr, int n)
+{
+    if (arr == NULL || n <= 0)
+        return;
+
+    int i = 0; // tracks next zero fill index
+
+    // Move non-zero elements forward
+    for (int j = 0; j < n; j++)
+    {
+        if (arr[j] != 0)
+        {
+            arr[i] = arr[j];
+            i++;
+        }
+    }
+
+    // Fill remaining positions with zeros
+    while (i < n)
+    {
+        arr[i] = 0;
+        i++;
+    }
+} 
+
 int main()
 {
     int arr[] = {0, 1, 0, 3, 12};

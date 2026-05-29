@@ -17,6 +17,25 @@ void reverse_array(int *arr, int n)
     }
 }
 
+void reverse_string(char *str)
+{
+    if(str == NULL)
+        return;
+
+    int st = 0;
+    int end = strlen(str) - 1; // strlen excludes NULL char so no need to rewrite NULL after reverse string
+
+    while(st < end)
+    {
+        char temp = str[st];
+        str[st] = str[end];
+        str[end] = temp;
+
+        st++;
+        end--;
+    }
+}
+
 int main(void)
 {
     int arr[] = {1, 2, 3, 4, 5, 6};
