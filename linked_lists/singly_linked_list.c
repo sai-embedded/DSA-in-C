@@ -202,7 +202,7 @@ node_s* reverse_list_iterative(node_s *head)
     }
 
     // At the end, curr = next = NULL, prev = last valid node and is the new head 
-    return prev;
+    return prev; // TODO: caller should update head with prev like head = prev; 
 }
 
 int main()
