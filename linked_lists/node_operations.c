@@ -146,6 +146,94 @@ void free_list(void)
     head = NULL;
 }
 
+/*
+Even List: 10-20-30-40-50-60-NULL 
+f,s = 10
+It1: s = 20, f = 30
+It2: s = 30, f = 50
+It3: s = 40, f == NULL 
+It4: break while; middle node 40 (second middle)
+        
+Odd List: 10-20-30-40-50-NULL 
+f,s = 10
+It1: s = 20, f = 30
+It2: s = 30, f = 50
+It3: f->next = NULL break; return middle node 30
+        
+List: 10-20-NULL
+s,f = 10
+It1: s = 20, f = NULL;
+It2: break; return middle node 20 (second middle)
+
+
+IMP NOTE:
+1. To return Second Middle node, intialize:
+slow = head;
+fast = head;
+2. To return First Middle node, intialize:
+slow = head;
+fast = head->next;
+*/
+
+int find_second_middle_node(void)
+{
+    if(head == NULL)
+    {
+        return -1;
+    }
+
+    Node *slow = head;
+    Node *fast = head; // KEY to return 2nd middle node 
+
+    while(fast != NULL && fast->next != NULL) // VIMP: prevents deref a NULL pointer 
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow->data;
+}
+
+int find_first_middle_node(void)
+{
+    if(head == NULL)
+    {
+        return -1;
+    }
+
+    Node *slow = head;
+    Node *fast = head->next; // KEY to return first middle node 
+
+    // We must check the pointer itself before dereferencing it.
+    // what if we did fast = NULL; while(fast->next != NULL && fast != NULL) will crash immediately
+    while(fast != NULL && fast->next != NULL) // VIMP: prevents deref a NULL pointer @ 1 Node (ex: 10->NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow->data;
+}
+
+int detect_cycle(void)
+{
+    Node *slow = head;
+    Node *fast = head;
+
+    while(fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if(slow == fast)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int main(void)
 {
     head = create_node(10);
