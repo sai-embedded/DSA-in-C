@@ -61,6 +61,24 @@ void main()
     * allocation failure
     * non deterministic allocation time
     * harder debugging    
+    * 
+    * difference between fragmentation and memory leak?
+        Memory leak: 
+        your program allocates memory with malloc/calloc/realloc 
+        and then loses the pointer or never calls free. 
+        The memory stays reserved until the program ends, 
+        so usable heap memory shrinks over time.
+        
+        Fragmentation: 
+        memory is still available, but it is split into many small pieces. 
+        You may have enough total free memory, 
+        but not enough contiguous space for a new allocation.
+    
+        Example: Leak: p = malloc(100); p = malloc(200); 
+        if the first block is never freed, that 100 bytes is leaked.
+        Fragmentation: if your program repeatedly allocates and 
+        frees blocks of different sizes, the heap can end up with 
+        scattered holes that are too small for a large request.
     */
 
     char str_arr[] = "hello";
