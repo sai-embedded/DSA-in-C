@@ -234,6 +234,43 @@ int detect_cycle(void)
     return 0;
 }
 
+// NEED to think how do we determine that the actual cycle begins at?
+Node *find_cycle_start_node(void)
+{
+    return 0; 
+}
+
+Node *find_nth_from_end(int n)
+{
+    // 10 20 30 40 50 NULL -> if n = 2, return 40
+
+    if (head == NULL || n <= 0)
+    {
+        return NULL;
+    }
+
+    Node *fast = head;
+    Node *slow = head;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (fast == NULL)
+        {
+            return NULL;
+        }
+
+        fast = fast->next;
+    }
+
+    while (fast != NULL)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+
+    return slow;
+}
+
 int main(void)
 {
     head = create_node(10);
