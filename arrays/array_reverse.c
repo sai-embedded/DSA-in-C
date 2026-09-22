@@ -89,3 +89,19 @@ int main(void)
 
     return 0;
 }
+
+/*
+Reverse array in place: Identify the following
+
+Requirements: 
+1. time complexity O(n)
+2. space complexity O(1) dont create another array
+
+Inputs: array -> [1,2,3,4,5], number of elements in array -> 5
+Output: [5,4,3,2,1]
+
+Edge cases:
+1. array empty NULL []
+2. single element in array [1]
+3. More than 1 element [1, 2] 
+*/

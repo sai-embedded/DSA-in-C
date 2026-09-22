@@ -276,3 +276,44 @@ int main(void)
     head = create_node(10);
     return 0;
 }
+
+// example passing struct node ** head as input; why **? 
+void delete_node_at_start(struct Node ** head)
+{
+    if(*head == NULL)
+    {
+        return;
+    }
+
+    struct Node *temp = *head;
+    *head = (*head)->next;
+    free(temp);
+} 
+
+void delete_node_at_end(struct  Node ** head)
+{
+    if(*head == NULL)
+    {
+        return;
+    }
+
+    // only one node
+    if( (*head)->next == NULL)
+    {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    struct Node *temp = *head;
+    struct Node *prev = NULL;
+
+    while(temp->next  != NULL)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    prev->next = NULL;
+    free(temp);
+}
